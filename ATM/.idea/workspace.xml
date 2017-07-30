@@ -30,10 +30,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="bank_gui.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="bank_gui.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bank_gui.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
+            <state relative-caret-position="17">
               <caret line="35" column="92" selection-start-line="35" selection-start-column="92" selection-end-line="35" selection-end-column="92" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
@@ -42,11 +42,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="bank_account_gui.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="bank_account_gui.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/bank_account_gui.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="782">
-              <caret line="48" column="94" selection-start-line="48" selection-start-column="94" selection-end-line="48" selection-end-column="94" />
+            <state relative-caret-position="134">
+              <caret line="10" column="41" selection-start-line="10" selection-start-column="41" selection-end-line="10" selection-end-column="41" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
@@ -92,8 +92,8 @@
         <option value="$PROJECT_DIR$/bank.py" />
         <option value="$PROJECT_DIR$/bank_account.py" />
         <option value="$PROJECT_DIR$/גכדיכע.py" />
-        <option value="$PROJECT_DIR$/bank_account_gui.py" />
         <option value="$PROJECT_DIR$/bank_gui.py" />
+        <option value="$PROJECT_DIR$/bank_account_gui.py" />
       </list>
     </option>
   </component>
@@ -114,7 +114,7 @@
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1">
+    <navigator proportions="" version="1">
       <flattenPackages />
       <showMembers />
       <showModules />
@@ -127,18 +127,12 @@
       <manualOrder />
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes>
-      <pane id="ProjectPane">
-        <subPane />
-      </pane>
-      <pane id="Scratches" />
-      <pane id="Scope" />
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
-  <component name="RunManager" selected="Python.bank_gui">
+  <component name="RunManager" selected="Python.bank_account_gui">
     <configuration default="false" name="bank" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -367,8 +361,8 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.bank_gui" />
-        <item index="1" class="java.lang.String" itemvalue="Python.bank_account_gui" />
+        <item index="0" class="java.lang.String" itemvalue="Python.bank_account_gui" />
+        <item index="1" class="java.lang.String" itemvalue="Python.bank_gui" />
         <item index="2" class="java.lang.String" itemvalue="Python.גכדיכע" />
         <item index="3" class="java.lang.String" itemvalue="Python.bank" />
         <item index="4" class="java.lang.String" itemvalue="Python.main" />
@@ -857,22 +851,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bank_account_gui.py">
+    <entry file="file://$PROJECT_DIR$/bank_gui.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="782">
-          <caret line="48" column="94" selection-start-line="48" selection-start-column="94" selection-end-line="48" selection-end-column="94" />
+        <state relative-caret-position="17">
+          <caret line="35" column="92" selection-start-line="35" selection-start-column="92" selection-end-line="35" selection-end-column="92" />
           <folding>
-            <element signature="e#0#21#0" expanded="true" />
+            <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bank_gui.py">
+    <entry file="file://$PROJECT_DIR$/bank_account_gui.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="35" column="92" selection-start-line="35" selection-start-column="92" selection-end-line="35" selection-end-column="92" />
+        <state relative-caret-position="134">
+          <caret line="10" column="41" selection-start-line="10" selection-start-column="41" selection-end-line="10" selection-end-column="41" />
           <folding>
-            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#0#21#0" expanded="true" />
           </folding>
         </state>
       </provider>
