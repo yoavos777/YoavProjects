@@ -45,10 +45,18 @@
       <file leaf-file-name="bank_account_gui.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/bank_account_gui.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< bank
             <state relative-caret-position="134">
               <caret line="10" column="41" selection-start-line="10" selection-start-column="41" selection-end-line="10" selection-end-column="41" />
+=======
+            <state relative-caret-position="406">
+              <caret line="26" column="41" selection-start-line="26" selection-start-column="41" selection-end-line="26" selection-end-column="41" />
+>>>>>>> local
               <folding>
-                <element signature="e#0#21#0" expanded="true" />
+                <marker date="1501484242739" expanded="true" signature="0:59" ph="import ..." />
+                <marker date="1501484242739" expanded="true" signature="94:4503" ph="..." />
+                <marker date="1501484242739" expanded="true" signature="126:316" ph="..." />
+                <marker date="1501484242739" expanded="true" signature="4471:4503" ph="..." />
               </folding>
             </state>
           </provider>
@@ -127,7 +135,17 @@
       <manualOrder />
       <foldersAlwaysOnTop value="true" />
     </navigator>
+<<<<<<< bank
     <panes />
+=======
+    <panes>
+      <pane id="ProjectPane">
+        <subPane />
+      </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
+    </panes>
+>>>>>>> local
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -457,7 +475,10 @@
         <state relative-caret-position="850">
           <caret line="52" column="26" selection-start-line="52" selection-start-column="26" selection-end-line="52" selection-end-column="26" />
           <folding>
-            <element signature="e#0#21#0" expanded="true" />
+            <marker date="1501484242739" expanded="true" signature="0:59" ph="import ..." />
+            <marker date="1501484242739" expanded="true" signature="94:4503" ph="..." />
+            <marker date="1501484242739" expanded="true" signature="126:316" ph="..." />
+            <marker date="1501484242739" expanded="true" signature="4471:4503" ph="..." />
           </folding>
         </state>
       </provider>
@@ -511,7 +532,10 @@
         <state relative-caret-position="714">
           <caret line="42" column="4" selection-start-line="42" selection-start-column="4" selection-end-line="42" selection-end-column="4" />
           <folding>
-            <element signature="e#0#21#0" expanded="true" />
+            <marker date="1501484242739" expanded="true" signature="0:59" ph="import ..." />
+            <marker date="1501484242739" expanded="true" signature="94:4503" ph="..." />
+            <marker date="1501484242739" expanded="true" signature="126:316" ph="..." />
+            <marker date="1501484242739" expanded="true" signature="4471:4503" ph="..." />
           </folding>
         </state>
       </provider>
@@ -557,7 +581,10 @@
         <state relative-caret-position="714">
           <caret line="42" column="4" selection-start-line="42" selection-start-column="4" selection-end-line="42" selection-end-column="4" />
           <folding>
-            <element signature="e#0#21#0" expanded="true" />
+            <marker date="1501484242739" expanded="true" signature="0:59" ph="import ..." />
+            <marker date="1501484242739" expanded="true" signature="94:4503" ph="..." />
+            <marker date="1501484242739" expanded="true" signature="126:316" ph="..." />
+            <marker date="1501484242739" expanded="true" signature="4471:4503" ph="..." />
           </folding>
         </state>
       </provider>
@@ -603,7 +630,10 @@
         <state relative-caret-position="714">
           <caret line="42" column="4" selection-start-line="42" selection-start-column="4" selection-end-line="42" selection-end-column="4" />
           <folding>
-            <element signature="e#0#21#0" expanded="true" />
+            <marker date="1501484242739" expanded="true" signature="0:59" ph="import ..." />
+            <marker date="1501484242739" expanded="true" signature="94:4503" ph="..." />
+            <marker date="1501484242739" expanded="true" signature="126:316" ph="..." />
+            <marker date="1501484242739" expanded="true" signature="4471:4503" ph="..." />
           </folding>
         </state>
       </provider>
@@ -649,7 +679,10 @@
         <state relative-caret-position="476">
           <caret line="28" column="93" selection-start-line="28" selection-start-column="93" selection-end-line="28" selection-end-column="93" />
           <folding>
-            <element signature="e#0#21#0" expanded="true" />
+            <marker date="1501484242739" expanded="true" signature="0:59" ph="import ..." />
+            <marker date="1501484242739" expanded="true" signature="94:4503" ph="..." />
+            <marker date="1501484242739" expanded="true" signature="126:316" ph="..." />
+            <marker date="1501484242739" expanded="true" signature="4471:4503" ph="..." />
           </folding>
         </state>
       </provider>
@@ -853,18 +886,33 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/bank_gui.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< bank
         <state relative-caret-position="17">
           <caret line="35" column="92" selection-start-line="35" selection-start-column="92" selection-end-line="35" selection-end-column="92" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
+=======
+        <state relative-caret-position="406">
+          <caret line="26" column="41" selection-start-line="26" selection-start-column="41" selection-end-line="26" selection-end-column="41" />
+          <folding>
+            <marker date="1501484242739" expanded="true" signature="0:59" ph="import ..." />
+            <marker date="1501484242739" expanded="true" signature="94:4503" ph="..." />
+            <marker date="1501484242739" expanded="true" signature="126:316" ph="..." />
+            <marker date="1501484242739" expanded="true" signature="4471:4503" ph="..." />
+>>>>>>> local
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/bank_account_gui.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< bank
         <state relative-caret-position="134">
           <caret line="10" column="41" selection-start-line="10" selection-start-column="41" selection-end-line="10" selection-end-column="41" />
+=======
+        <state relative-caret-position="17">
+          <caret line="35" column="92" selection-start-line="35" selection-start-column="92" selection-end-line="35" selection-end-column="92" />
+>>>>>>> local
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>

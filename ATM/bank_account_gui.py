@@ -51,18 +51,22 @@ class BankAccountWindow(object):
         self._new_account = BankAccount("yoav")
 
     def deposit(self):
+        self._text_box.delete('1.0', END)
         self._bank_account = self._new_account.deposit(int(self._deposit_account_name.get()))
         self._text_box.insert(END, "your deposit is %d \n" % self._bank_account)
 
     def withdraw(self):
+        self._text_box2.delete('1.0', END)
         self._bank_account = self._new_account.withdraw(int(self._withdraw_account_name.get()))
         self._text_box2.insert(END, "your deposit is %d \n" % self._bank_account)
 
     def get_name(self):
+        self._text_box3.delete('1.0', END)
         self._bank_account = self._new_account.get_name()
         self._text_box3.insert(END, "your name is %s \n" % self._bank_account)
 
     def get_balance(self):
+        self._text_box4.delete('1.0', END)
         self._bank_account = self._new_account.get_balance()
         self._text_box4.insert(END, "your balance is %d \n" % self._bank_account)
 
