@@ -1,0 +1,152 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+#include "firstTransition.h"
+#include "secondTransition.h"
+#include "constTables.h"
+
+extern int IC;
+extern int memory_line[14];
+int num_line;
+
+void skip_spaces(char*, int *);
+void read_word(char* , char* , int *);
+int is_symbol_exists(char *, ptr *);
+int is_symbol_arr_exists(char *, ptr *);
+int * decToBinary(int,int);
+int is_macro(char *, ptr *);
+int is_reg(char* );
+void one_operand(char* ,char* ,int *);
+void two_operand(char* , char* , char* ,int *);
+
+int symbol_val(char* operand, ptr *headp)
+{
+	ptr curr;
+	curr = *headp;
+	while(curr!=NULL){
+		if(strcmp(curr->name,operand) == 0)
+			return curr->val;
+		curr = curr->next;
+	}
+	return -1;
+}
+
+void replace_line(FILE *fp2,int ic_s)
+{
+	rewind(fp2);
+	char line[MAX];
+	char line_op[MAX];
+	int num;
+	int i;
+
+	while(fgets(line, MAX, fp2) != NULL){
+		i=0;
+		while(line[i] != ' ' && line[i] != '\n'){
+			line_op[i] = line[i];
+			i++;
+		}
+		line_op[i] = '\0';
+		num = atoi(line_op);
+		
+		if(num == ic_s+99){
+			fprintf(fp2,"%d  ",ic_s+100);
+			for(i=0;i<14;i++)
+				fprintf(fp2,"%d",memory_line[i]);
+			fprintf(fp2,"\n");
+			return;
+		}
+	}
+		
+}
+
+void insert_symbol_memory(FILE *fp2,char* input,char* operand,int *index, ptr *headp)
+{
+	char line[MAX];
+	int num;
+	int *num_arr;
+	int i;
+	int k;	
+	char line_op[MAX];
+	int ic_s;
+
+	IC = 0;
+	
+	while(fgets(line, MAX, fp2) != NULL){
+		i=0;
+		while(line[i] != ' '){
+			line_op[i] = line[i];
+			i++;
+		}
+		line_op[i] = '\0';
+
+		if(strcmp(line_op,operand) == 0){
+			num = symbol_val(operand,headp);
+			if(num != -1){
+				num_arr = decToBinary(num,2);
+				k=0;
+				for(i=0;i<12;i++){
+					memory_line[k] = num_arr[i];
+					k++;
+				}
+				ic_s = IC;
+				
+				replace_line(fp2,ic_s);
+				IC++;
+				return;
+			}
+			else{
+				printf("Not a symbol: Line %d.\n",IC);
+				return;
+			}
+		}
+		IC++;
+	}
+
+}
+
+
+
+void symbol_second_tran(FILE *fp2,char* input, char* word, char* operand1, char* operand2, int *index,ptr *headp)
+{
+	int operand_num;
+	char symbol_name[MAX];
+	int place;
+	strcpy(symbol_name,word);
+	skip_spaces(input,index);
+	read_word(input,word,index);
+
+	operand_num = is_command(word);
+
+	if(operand_num == 1){
+		rewind(fp2);
+		one_operand(input,operand1,index);
+		if(is_symbol_arr_exists(operand1,headp))
+			get_symbol_name(operand1);
+
+		if(!is_macro(operand1,headp) && !is_reg(operand1) && operand1[0] != '#')
+			insert_symbol_memory(fp2,input,operand1,index,headp);
+	}
+
+	else if(operand_num == 2){
+		rewind(fp2);
+		two_operand(input,operand1,operand2,index);
+		if(is_symbol_arr_exists(operand1,headp))
+				get_symbol_name(operand1);
+
+		if(!is_macro(operand1,headp) && !is_reg(operand1) && operand1[0] != '#')
+			insert_symbol_memory(fp2,input,operand1,index,headp);
+
+		if(is_symbol_arr_exists(operand2,headp))
+			get_symbol_name(operand2);
+
+		rewind(fp2);
+		if(!is_macro(operand2,headp) && !is_reg(operand2) && operand1[0] != '#')
+			insert_symbol_memory(fp2,input,operand2,index,headp);
+		
+	}
+
+	else
+		return;
+}
