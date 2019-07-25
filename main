@@ -1,0 +1,214 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "firstTransition.h"
+#include "secondTransition.h"
+
+extern int is_symbol;
+extern int IC;
+
+void skip_spaces(char*, int *);
+void read_word(char* , char* , int *);
+int is_reg(char* );
+int is_macro(char *, ptr *);
+int is_command(char* word);
+void insert(ptr *, int, char *, char *);
+void print_list(ptr);
+void insert_memory_zero(char* , char* ,int *,FILE *);
+void insert_memory_one(char* , char* , char* ,int *,ptr *,FILE *);
+void insert_memory_two(char* , char* ,char* , char* ,int *,ptr *,FILE *);
+void one_operand(char* ,char* ,int *);
+void two_operand(char* , char* , char* ,int *);
+void macro_func(char* , char* , int *, ptr *);
+void data_func(char* , char* , int *,ptr *);
+void symbol_func(FILE *,char* , char* , char* , char* , int *,ptr *);
+void extern_func(char* , char* , char* , int *,ptr *);
+void build_arr();
+void build_ascii();
+void insert_symbol_memory(FILE *,char* ,char* ,int *, ptr *);
+void symbol_second_tran(FILE *,char* , char* , char* , char* , int *,ptr *);
+void get_symbol_name(char* );
+
+
+
+int main(int argc, char *argv[])
+{
+	FILE *fp1 = fopen("input1.txt", "r");
+        if(fp1 == NULL) {
+         	perror("Unable to open file!");
+         	exit(1);
+   	}
+	
+	FILE *fp2 = fopen("output1.txt", "w+");
+        if(fp2 == NULL) {
+         	perror("Unable to open file!");
+         	exit(1);
+   	}
+	
+	/*if(argc == 1){
+		printf("No file was sent\n");
+		exit(1);
+	}
+	printf("%s\n",argv[1]);
+	FILE *fp1 = fopen(argv[1], "r");
+	if(fp1 == NULL) {
+         	perror("Unable to open file!");
+         	exit(1);
+   	}
+	
+	FILE *fp2 = fopen("output2.txt", "r+");
+        if(fp2 == NULL) {
+         	perror("Unable to open file!");
+         	exit(1);
+   	}*/	
+
+	
+	char input[MAX];/*array of char for the input*/
+	char first_field[MAX];/*array of char for the word in the line*/
+	char operand1[MAX];/**/
+	char operand2[MAX];/**/
+	int p_index;/*varible that keeps the place index of input*/
+	int operand_count;
+	int i;
+
+	ptr head = NULL;
+	build_arr();
+	build_ascii();
+
+	while(fgets(input, 200, fp1) != NULL)/*reading the assembly file until it ends*/
+	{
+		
+		p_index = 0;
+		is_symbol = 0;
+
+		skip_spaces(input,&p_index);
+		read_word(input,first_field,&p_index);/*read the first field/word*/
+
+		operand_count = is_command(first_field);/**/
+		
+		i = 0;
+		while(first_field[i] != '\0')
+			i++;
+
+		operand_count = is_command(first_field);
+
+		if(strcmp(first_field,".define") == 0)/*if the first field is define */
+			macro_func(input,first_field,&p_index,&head);
+		
+		else if(first_field[i - 1] == ':'){/*If the first field is a symbol*/
+			is_symbol = 1;
+			i = 0;
+			char f[MAX];
+			while(first_field[i] != ':'){
+				f[i] = first_field[i];
+				i++;
+			}
+			f[i] = '\0';
+			symbol_func(fp2,input,f,operand1,operand2,&p_index,&head);
+		}
+
+		else if(strcmp(first_field,".entry") == 0 || strcmp(first_field,".extern") == 0)/*If the first field is extern of entry*/
+			extern_func(input,first_field,operand1,&p_index,&head);
+
+		else if(operand_count == 0)
+			insert_memory_zero(input,first_field,&p_index,fp2);
+
+		else if(operand_count == 1){
+			one_operand(input,operand1,&p_index);
+			insert_memory_one(input,first_field,operand1,&p_index,&head,fp2);
+		}
+
+		else if(operand_count == 2){
+			two_operand(input,operand1,operand2,&p_index);
+			insert_memory_two(input,first_field,operand1,operand2,&p_index,&head,fp2);
+		}
+
+		else if(operand_count == -1)
+			printf("No such command\n");	
+			
+	}
+
+	IC = 0;
+
+
+	rewind(fp1);
+	while(fgets(input, 200, fp1) != NULL)
+	{
+		p_index = 0;
+		is_symbol = 0;
+		skip_spaces(input,&p_index);
+		read_word(input,first_field,&p_index);
+		operand_count = is_command(first_field);
+		
+		i = 0;
+		while(first_field[i] != '\0')
+			i++;
+
+		if(first_field[i - 1] == ':'){
+			symbol_second_tran(fp2,input,first_field,operand1,operand2,&p_index,&head);
+		}
+
+		else if(operand_count == 1){
+			rewind(fp2);
+			one_operand(input,operand1,&p_index);
+			if(is_symbol_arr_exists(operand1,&head))
+				get_symbol_name(operand1);
+			if(!is_macro(operand1,&head) && !is_reg(operand1) && operand1[0] != '#')
+				insert_symbol_memory(fp2,input,operand1,&p_index,&head);
+		}
+
+		else if(operand_count == 2){
+			rewind(fp2);
+			two_operand(input,operand1,operand2,&p_index);
+
+			if(is_symbol_arr_exists(operand1,&head))
+				get_symbol_name(operand1);
+			if(!is_macro(operand1,&head) && !is_reg(operand1) && operand1[0] != '#')
+				insert_symbol_memory(fp2,input,operand1,&p_index,&head);
+
+			rewind(fp2);
+			if(is_symbol_arr_exists(operand2,&head))
+				get_symbol_name(operand2);
+			if(!is_macro(operand2,&head) && !is_reg(operand2) && operand1[0] != '#')
+				insert_symbol_memory(fp2,input,operand2,&p_index,&head);
+		}
+		
+	}	
+	
+
+	FILE *fpob;
+	/*FILE *fpext;
+	FILE *fpent;*/
+
+	fpob = fopen("final.txt","w");	
+	if(fpob == NULL) {
+         	perror("Unable to open file!");
+         	exit(1);
+   	}
+
+
+	rewind(fp2);
+	while(fgets(input, 200, fp2) != NULL)
+	{
+		p_index = 0;
+		char stam = '%';
+		read_word(input,first_field,&p_index);
+		fprintf(fpob,"%s  ",first_field);
+		skip_spaces(input,&p_index);
+		read_word(input,operand1,&p_index);
+		for(i=0;i<14;i=i+2){
+			if(operand1[i] == '0' && operand1[i+1] == '0')
+				fprintf(fpob,"*");
+			if(operand1[i] == '0' && operand1[i+1] == '1')
+				fprintf(fpob,"#");
+			if(operand1[i] == '1' && operand1[i+1] == '0')
+				fprintf(fpob,"%c",stam);
+			if(operand1[i] == '1' && operand1[i+1] == '1')
+				fprintf(fpob,"!");
+		}
+		fprintf(fpob,"\n");
+	}
+	/*print_list(head);*/
+	return 0;
+}
