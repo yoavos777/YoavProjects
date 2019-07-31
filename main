@@ -7,74 +7,87 @@
 
 extern int is_symbol;
 extern int IC;
+int line_cnt = 1;
+int is_error = 0;
 
 void skip_spaces(char*, int *);
 void read_word(char* , char* , int *);
 int is_reg(char* );
 int is_macro(char *, ptr *);
 int is_command(char* word);
+int is_symbol_arr_exists(char *);
 void insert(ptr *, int, char *, char *);
-void print_list(ptr);
 void insert_memory_zero(char* , char* ,int *,FILE *);
-void insert_memory_one(char* , char* , char* ,int *,ptr *,FILE *);
-void insert_memory_two(char* , char* ,char* , char* ,int *,ptr *,FILE *);
-void one_operand(char* ,char* ,int *);
-void two_operand(char* , char* , char* ,int *);
-void macro_func(char* , char* , int *, ptr *);
-void data_func(char* , char* , int *,ptr *);
-void symbol_func(FILE *,char* , char* , char* , char* , int *,ptr *);
+int insert_memory_one(char* , char* , char* ,int *,ptr *,FILE *);
+int insert_memory_two(char* , char* ,char* , char* ,int *,ptr *,FILE *);
+int one_operand(char* ,char* ,int *);
+int two_operand(char* , char* , char* ,int *);
+int macro_func(char* , char* , int *, ptr *);
+int data_func(char* , char* , int *,ptr *);
+int symbol_func(FILE *,char* , char* , char* , char* , int *,ptr *);
 void extern_func(char* , char* , char* , int *,ptr *);
-void build_arr();
+void build_command_arr();
 void build_ascii();
 void insert_symbol_memory(FILE *,char* ,char* ,int *, ptr *);
 void symbol_second_tran(FILE *,char* , char* , char* , char* , int *,ptr *);
 void get_symbol_name(char* );
+void is_entry(char* , ptr *);
 
 
 
 int main(int argc, char *argv[])
 {
-	FILE *fp1 = fopen("input1.txt", "r");
+	/*
+	FILE *fp1 = fopen("input2.txt", "r");
         if(fp1 == NULL) {
          	perror("Unable to open file!");
          	exit(1);
    	}
 	
-	FILE *fp2 = fopen("output1.txt", "w+");
+	FILE *fp2 = fopen("output2.txt", "w+");
         if(fp2 == NULL) {
          	perror("Unable to open file!");
          	exit(1);
-   	}
+   	}*/
 	
-	/*if(argc == 1){
+	char fp_name[200];
+	strcpy(fp_name,argv[1]);
+	strcat(fp_name,".as");
+
+	char fp_name2[200];
+	strcpy(fp_name2,argv[1]);
+	strcat(fp_name2,"BMC");
+	strcat(fp_name2,".txt");
+
+	if(argc == 1){
 		printf("No file was sent\n");
 		exit(1);
 	}
-	printf("%s\n",argv[1]);
-	FILE *fp1 = fopen(argv[1], "r");
+	
+	FILE *fp1 = fopen(fp_name, "r");
 	if(fp1 == NULL) {
          	perror("Unable to open file!");
          	exit(1);
    	}
-	
-	FILE *fp2 = fopen("output2.txt", "r+");
+
+	FILE *fp2 = fopen(fp_name2, "w+");
         if(fp2 == NULL) {
          	perror("Unable to open file!");
          	exit(1);
-   	}*/	
+   	}	
 
 	
 	char input[MAX];/*array of char for the input*/
 	char first_field[MAX];/*array of char for the word in the line*/
-	char operand1[MAX];/**/
-	char operand2[MAX];/**/
+	char operand1[MAX];/*array of char for the first operand*/
+	char operand2[MAX];/*array of char for the second operand*/
 	int p_index;/*varible that keeps the place index of input*/
 	int operand_count;
 	int i;
 
 	ptr head = NULL;
-	build_arr();
-	build_ascii();
+	build_command_arr();/*build the commands array*/
+	build_ascii();/*build the asciiarray*/
 
 	while(fgets(input, 200, fp1) != NULL)/*reading the assembly file until it ends*/
 	{
@@ -85,7 +98,7 @@ int main(int argc, char *argv[])
 		skip_spaces(input,&p_index);
 		read_word(input,first_field,&p_index);/*read the first field/word*/
 
-		operand_count = is_command(first_field);/**/
+		operand_count = is_command(first_field);/*checks if the first field is an operand*/
 		
 		i = 0;
 		while(first_field[i] != '\0')
@@ -93,8 +106,10 @@ int main(int argc, char *argv[])
 
 		operand_count = is_command(first_field);
 
-		if(strcmp(first_field,".define") == 0)/*if the first field is define */
+		if(strcmp(first_field,".define") == 0)/*if the first field is define */{
 			macro_func(input,first_field,&p_index,&head);
+			line_cnt++;
+		}
 		
 		else if(first_field[i - 1] == ':'){/*If the first field is a symbol*/
 			is_symbol = 1;
@@ -106,34 +121,55 @@ int main(int argc, char *argv[])
 			}
 			f[i] = '\0';
 			symbol_func(fp2,input,f,operand1,operand2,&p_index,&head);
+			line_cnt++;
 		}
 
-		else if(strcmp(first_field,".entry") == 0 || strcmp(first_field,".extern") == 0)/*If the first field is extern of entry*/
+		else if(strcmp(first_field,".entry") == 0 || strcmp(first_field,".extern") == 0){/*If the first field is extern or entry*/
 			extern_func(input,first_field,operand1,&p_index,&head);
+			line_cnt++;
+			}
 
-		else if(operand_count == 0)
-			insert_memory_zero(input,first_field,&p_index,fp2);
-
-		else if(operand_count == 1){
-			one_operand(input,operand1,&p_index);
-			insert_memory_one(input,first_field,operand1,&p_index,&head,fp2);
+		else if(operand_count == 0){/*If the first field is command with 0 operands*/
+			insert_memory_zero(input,first_field,&p_index,fp2);/*insert binary machine code*/
+			line_cnt++;
 		}
 
-		else if(operand_count == 2){
-			two_operand(input,operand1,operand2,&p_index);
-			insert_memory_two(input,first_field,operand1,operand2,&p_index,&head,fp2);
+		else if(operand_count == 1){/*If the first field is command with 1 operand*/
+			if(!one_operand(input,operand1,&p_index) || is_error)
+				insert_memory_one(input,first_field,operand1,&p_index,&head,fp2);/*insert binary machine code*/
+			line_cnt++;
 		}
 
-		else if(operand_count == -1)
-			printf("No such command\n");	
+		else if(operand_count == 2){/*If the first field is command with 2 operands*/
+			if(!two_operand(input,operand1,operand2,&p_index) || is_error)
+				insert_memory_two(input,first_field,operand1,operand2,&p_index,&head,fp2);/*insert binary machine code*/
+			line_cnt++;
+		}
+
+		else if(input[0] == ';'){/*If the it is a comment line*/
+			line_cnt++;
+			continue;
+		}
+
+		else if(input[p_index] == '\n'){/*If the it is an empty line*/
+			line_cnt++;
+			continue;
+		}
+		else if(operand_count == -1){/*If the first field is not any line*/
+			printf("No such command: Line %d\n",line_cnt);
+			line_cnt++;
+		}	
 			
 	}
 
-	IC = 0;
+	if(is_error)/*if there was an error during the first transition stop*/
+		exit(1);
+
+	IC = 0;/*reset IC*/
 
 
-	rewind(fp1);
-	while(fgets(input, 200, fp1) != NULL)
+	rewind(fp1);/*reset the pointer to the original file*/
+	while(fgets(input, 200, fp1) != NULL)/*reading the assembly file until it ends*/
 	{
 		p_index = 0;
 		is_symbol = 0;
@@ -149,28 +185,38 @@ int main(int argc, char *argv[])
 			symbol_second_tran(fp2,input,first_field,operand1,operand2,&p_index,&head);
 		}
 
-		else if(operand_count == 1){
-			rewind(fp2);
-			one_operand(input,operand1,&p_index);
-			if(is_symbol_arr_exists(operand1,&head))
+		else if(strcmp(first_field,".entry") == 0){/*If the first field is command with .entry*/
+			skip_spaces(input,&p_index);
+			read_word(input,operand1,&p_index);
+			is_entry(operand1,&head);
+		}
+
+		else if(operand_count == 1){/*If the first field is command with 1 operands*/
+			rewind(fp2);/*reset the pointer to the binary machine code file*/
+			one_operand(input,operand1,&p_index);/*get the operand name*/
+
+			if(is_symbol_arr_exists(operand1))/*checks if it the third addresing method gets the symbol name*/
 				get_symbol_name(operand1);
-			if(!is_macro(operand1,&head) && !is_reg(operand1) && operand1[0] != '#')
+
+			if(!is_macro(operand1,&head) && !is_reg(operand1) && operand1[0] != '#')/*if the operand is an symbol insert the binary machine code of the symbol to the file*/
 				insert_symbol_memory(fp2,input,operand1,&p_index,&head);
 		}
 
-		else if(operand_count == 2){
-			rewind(fp2);
-			two_operand(input,operand1,operand2,&p_index);
+		else if(operand_count == 2){/*If the first field is command with 2 operands*/
+			rewind(fp2);/*reset the pointer to the binary machine code file*/
+			two_operand(input,operand1,operand2,&p_index);/*get the operands names*/
 
-			if(is_symbol_arr_exists(operand1,&head))
+			if(is_symbol_arr_exists(operand1))/*checks if it the third addresing method gets the symbol name*/
 				get_symbol_name(operand1);
-			if(!is_macro(operand1,&head) && !is_reg(operand1) && operand1[0] != '#')
+
+			if(!is_macro(operand1,&head) && !is_reg(operand1) && operand1[0] != '#')/*if the first operand is an symbol insert the binary machine code of the symbol to the file*/
 				insert_symbol_memory(fp2,input,operand1,&p_index,&head);
 
 			rewind(fp2);
-			if(is_symbol_arr_exists(operand2,&head))
+			if(is_symbol_arr_exists(operand2))/*checks if it the third addresing method gets the symbol name*/
 				get_symbol_name(operand2);
-			if(!is_macro(operand2,&head) && !is_reg(operand2) && operand1[0] != '#')
+
+			if(!is_macro(operand2,&head) && !is_reg(operand2) && operand1[0] != '#')/*if the first operand is an symbol insert the binary machine code of the symbol to the file*/
 				insert_symbol_memory(fp2,input,operand2,&p_index,&head);
 		}
 		
@@ -178,37 +224,42 @@ int main(int argc, char *argv[])
 	
 
 	FILE *fpob;
-	/*FILE *fpext;
-	FILE *fpent;*/
+	FILE *fpext;
+	FILE *fpent;
 
-	fpob = fopen("final.txt","w");	
+	char f_nam[200];
+	strcpy(f_nam,argv[1]);
+	strcat(f_nam,".ob");
+	fpob = fopen(f_nam,"w");	
 	if(fpob == NULL) {
          	perror("Unable to open file!");
          	exit(1);
    	}
 
 
-	rewind(fp2);
-	while(fgets(input, 200, fp2) != NULL)
+	rewind(fp2);/*reset the pointer to the binary machine code file*/
+	while(fgets(input, 200, fp2) != NULL)/*reading the binary machine code file until it ends*/
 	{
 		p_index = 0;
 		char stam = '%';
+
 		read_word(input,first_field,&p_index);
-		fprintf(fpob,"%s  ",first_field);
+		fprintf(fpob,"%s  ",first_field);/*prints the Decimal Address of the line*/
 		skip_spaces(input,&p_index);
 		read_word(input,operand1,&p_index);
-		for(i=0;i<14;i=i+2){
-			if(operand1[i] == '0' && operand1[i+1] == '0')
+
+		for(i=0;i<14;i=i+2){/*converting the binary machine code to the special 4 base*/
+			if(operand1[i] == '0' && operand1[i+1] == '0')/*if the two bits are 00*/
 				fprintf(fpob,"*");
-			if(operand1[i] == '0' && operand1[i+1] == '1')
+			if(operand1[i] == '0' && operand1[i+1] == '1')/*if the two bits are 01*/
 				fprintf(fpob,"#");
-			if(operand1[i] == '1' && operand1[i+1] == '0')
+			if(operand1[i] == '1' && operand1[i+1] == '0')/*if the two bits are 10*/
 				fprintf(fpob,"%c",stam);
-			if(operand1[i] == '1' && operand1[i+1] == '1')
+			if(operand1[i] == '1' && operand1[i+1] == '1')/*if the two bits are 11*/
 				fprintf(fpob,"!");
 		}
 		fprintf(fpob,"\n");
 	}
-	/*print_list(head);*/
+	
 	return 0;
 }
